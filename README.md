@@ -1,6 +1,6 @@
 # photoswipe
 
-[预览demo]()
+[预览demo](https://summernian.github.io/photoswipe/01.PhotoSwipe%E7%9A%84%E4%BD%BF%E7%94%A8/index.html)
 
 ##### PhotoSwipe的使用
 
