@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui"/>
+<title>PhotoSwipe</title>
+<link rel="stylesheet" href="../lib/PhotoSwipe/photoswipes.css">
+<link rel="stylesheet" href="../lib/PhotoSwipe/default-skin/default-skin.css">
+<script src="../lib/PhotoSwipe/photoswipe.min.js"></script>
+<script src="../lib/PhotoSwipe/photoswipe-ui-default.min.js"></script>
+<style>
+    * {
+        margin: 0;padding: 0;
+    }
+    html,
+    body {
+    	height: 100%;
+        background: #000;
+        position: relative;
+    }
+
+    /*父系轮播主体框*/
+    .banner {
+        width: 480px;
+        height: 270px;
+        overflow: hidden;/*遮住其他图片*/
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    }
+    .my-gallery {
+        position: relative;
+    }
+    .my-gallery figure {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+    .my-gallery .img-dv a {
+        display:block;
+        width:100%;
+        text-align: center
+    }
+    .my-gallery .img-dv a img {
+        width:100%;
+    }
+
+    /*底层图标导航*/
+    .bannerLink {
+        position: absolute;
+        width: 100%;
+        left: 50%;
+        bottom: 10px;
+        transform: translate(-50%,0);
+        text-align: center;
+    }
+    .bannerLink a {
+        display: inline-block;
+        vertical-align: middle;
+        width: 10px;
+        height: 10px;
+        margin: 0 2px;
+        background-color: #fff;
+        line-height: 10px;
+        border-radius: 50%;
+    }
+    /*.my-gallery {width:96%;margin: 0 auto;}*/
+    /*.my-gallery .img-dv {width:100%;margin-bottom: 1%;}*/
+    /*.my-gallery .img-dv a {display:block;width:100%;text-align: center}*/
+    /*.my-gallery .img-dv a img {width:100%;}*/
+</style>
+<script src="../lib/JQuery/jquery-3.3.1.min.js"></script>
+<script>
+
+//  console.log($(window).width());
+
+    $(function () {
+
+        if( $(window).width() < 480 ) {
+            $('.banner').css({
+                'width': $(window).width(),
+                'height': 270 * ( $(window).width() / 480 )
+            })
+        }//监测屏幕变化，等比缩小尺寸
+
+        var innerGroup = $('.my-gallery figure'),//所有图片
+            aGrop = $('.bannerLink a'),//所有导航图标
+            _index = 0,//初始化index
+            timer = null;//打包定时器
+
+        aGrop.eq(_index).css('opacity','1').//初始化导航图标
+        siblings().css('opacity','.4');//其他变淡
+
+        timer = setInterval(goMove,3000);
+
+        aGrop.on('click',function () {
+            //导航切换
+            _index = aGrop.index( $(this) );
+            console.log(_index,$(this));
+
+            showPic(_index);
+
+        });
+
+        $('.banner').hover(function () {
+            //鼠标移入
+            clearInterval(timer);
+        },function () {
+            //鼠标移出
+            timer = setInterval(goMove,3000)
+        });
+
+        function goMove() {
+            //轮播效果
+            showPic(_index);
+            _index++;
+            if(_index == aGrop.length){
+                _index = 0;//当index与导航图标总数一致时初始化
+            };
+        }
+
+        function showPic(index) {
+            //根据index决定哪个显示，哪个隐藏
+            aGrop.eq(index).css('opacity','1').//当前添加
+            siblings().css('opacity','.4');//其他隐藏
+            innerGroup.eq(index).stop(true,true).fadeIn().//当前显示
+            siblings().fadeOut();//其他隐藏
+        }
+    });
+</script>
+</head>
+<body>
+<!--这段代码用于显示大图功能（固定不需要改动,分享等按钮不需要可以注释掉）-->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="pswp__bg"></div>
+    <div class="pswp__scroll-wrap">
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="banner">
+    <!--这段代码展示缩略图（href、data-size、src、figcaption的内容按需更改）-->
+    <div class="my-gallery" data-pswp-uid="1">
+        <figure>
+            <div class="img-dv"><a href="timg3.jpg" data-size="1920x1080"><img src="timg3.jpg"></a></div>
+            <figcaption style="display:none;">1.海滩</figcaption>
+        </figure>
+        <figure style="display:none;">
+            <div class="img-dv"><a href="timg1.jpg" data-size="3200x2000"><img src="timg1.jpg"></a></div>
+            <figcaption style="display:none;">2.月球</figcaption>
+        </figure>
+        <figure style="display:none;">
+            <div class="img-dv"><a href="timg2.jpg" data-size="2560x1600"><img src="timg2.jpg"></a></div>
+            <figcaption style="display:none;">3.行星</figcaption>
+        </figure>
+        <figure style="display:none;">
+            <div class="img-dv"><a href="timg.jpg" data-size="2560x1600"><img src="timg.jpg"></a></div>
+            <figcaption style="display:none;">4.星空</figcaption>
+        </figure>
+        <figure style="display:none;">
+            <div class="img-dv"><a href="timg4.jpg" data-size="2560x1600"><img src="timg4.jpg"></a></div>
+            <figcaption style="display:none;">5.地球</figcaption>
+        </figure>
+    </div>
+    <!--这段代码是导航（几张图几个导航a标签）-->
+    <div class="bannerLink">
+        <a href="javascript:;"></a>
+        <a href="javascript:;"></a>
+        <a href="javascript:;"></a>
+        <a href="javascript:;"></a>
+        <a href="javascript:;"></a>
+    </div>
+</section>
+<script src="js/PhotoswipeMove.js"></script>
+</body>
+</html>
