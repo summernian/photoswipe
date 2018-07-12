@@ -77,12 +77,19 @@
 
     $(function () {
 
-        if( $(window).width() < 480 ) {
-            $('.banner').css({
-                'width': $(window).width(),
-                'height': 270 * ( $(window).width() / 480 )
-            })
-        }//监测屏幕变化，等比缩小尺寸
+        $(window).resize(function () {
+            if( $(window).width() < 480 ) {
+                $('.banner').css({
+                    'width': $(window).width(),
+                    'height': 270 * ( $(window).width() / 480 )
+                })
+            } else {
+               $('.banner').css({
+                    'width': 480,
+                    'height': 270
+                })
+            }
+        });//监测屏幕变化，等比缩小尺寸
 
         var innerGroup = $('.my-gallery figure'),//所有图片
             aGrop = $('.bannerLink a'),//所有导航图标
